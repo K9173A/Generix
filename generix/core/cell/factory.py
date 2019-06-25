@@ -3,25 +3,9 @@ A module for a CellFactory.
 """
 import random
 
-from generix.core.cell.genome import Genome, generate_genome
-from generix.core.cell.id import Cell
-
-
-def register_cell(cls):
-    """
-    Registers cells for simulation.
-    :param cls: cell class.
-    :return: cell class.
-    """
-    factory.create(cls.__settings__['id'].value, cls.__settings__['id'], cls)
-    return cls
-
-
-class CellFactoryItem:
-    def __init__(self, item_id, item_type, item_class):
-        self.id = item_id
-        self.type = item_type
-        self.cls = item_class
+from generix.core.genome.genome import Genome
+from generix.core.cell.id import CellId
+from generix.core.settings.registry import settings_reg
 
 
 class CellFactory:
@@ -32,60 +16,36 @@ class CellFactory:
         """
         Constructs CellFactory object.
         """
-        self._storage = []
         self._choices = {}
         self._max = 0
-
-    @property
-    def storage(self):
-        return self._storage
-
-    def create(self, item_id, item_type, item_class):
-        """
-        Creates new item and appends cell class to the dict of random cell choices.
-        :param item_id: item id.
-        :param item_type: item type (enum value).
-        :param item_class: item class.
-        :return: None.
-        """
-        self._storage.append(CellFactoryItem(item_id, item_type, item_class))
-        self._storage = sorted(self._storage, key=lambda item: item.id)
-        if 'chance' in item_class.__settings__.keys():
-            current = item_class.__settings__['chance']
-            self._choices[(self._max, self._max + current)] = item_class.__settings__['id']
+        for cell_id, cell_data in settings_reg.find('cell').items():
+            if not isinstance(cell_data, dict):
+                continue
+            current = settings_reg.search(cell_data, 'chance')
+            if current is None:
+                continue
+            self._choices[(self._max, self._max + current)] = cell_id
             self._max += current
 
-    def find(self, attr_key, attr_val):
-        """
-        Find item by attribute and value.
-        :param attr_key: attribute name.
-        :param attr_val: attribute value.
-        :return: CellFactoryItem instance if found, None otherwise.
-        """
-        for item in self._storage:
-            value = getattr(item, attr_key)
-            if value and value == attr_val:
-                return item
-        return None
-
-    def create_cell(self, name):
+    def create_cell(self, cell_id):
         """
         Creates cell instance of a specific type.
-        :param name: value of Cell enum.
+        :param cell_id: CellId value.
         :return: cell instance.
         """
-        cell_cls = self.find('type', name).cls
+        cell_data = settings_reg.find(cell_id)
 
         # TODO: загрузка генома из файла
         genome = Genome.generate(
-            cell_cls.__settings__['genome_max_len'],
-            cell_cls.__settings__['allowed_actions']
+            settings_reg.search(cell_data, 'genome_max_len'),
+            settings_reg.search(cell_data, 'allowed_actions')
         )
 
-        if name == Cell.HUNTER_CELL:
-            return cell_cls(genome, cell_cls.__settings__['hp']['at_start'])
+        cls = settings_reg.search(cell_data, 'cls')
+        if cell_id == CellId.HUNTER_CELL:
+            return cls(genome, settings_reg.search(cell_data, 'at_start'))
         else:
-            return cell_cls(genome)
+            return cls(genome)
 
     def create_random_cell(self):
         """

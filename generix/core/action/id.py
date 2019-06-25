@@ -11,8 +11,3 @@ class Action(enum.Enum):
     STAY = 2
     TURN = 3
     MOVE = 4
-
-
-class CommandWrapper:
-    def __init__(self):
-        pass

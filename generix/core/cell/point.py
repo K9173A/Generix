@@ -25,6 +25,8 @@ class Point:
     """
     Point class with 2 coordinates.
     """
+    __slots__ = ('x', 'y')
+
     def __init__(self, x, y):
         """
         Constructs point object.

@@ -7,7 +7,7 @@ import random
 
 class Genome:
     """
-    Genome holds a list of commands for a Cell object.
+    Genome holds a list of commands for a CellId object.
     """
     def __init__(self, actions):
         """

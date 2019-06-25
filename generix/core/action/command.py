@@ -1,8 +1,6 @@
 """
 A module for different commands which composes into Action.
 """
-import copy
-
 from generix.core.cell.direction import Direction
 
 
@@ -70,25 +68,19 @@ def move(board, point, cell):
     Sets cell on point position.
     :param board: Board instance.
     :param point: Point instance of cell location.
-    :param cell: Cell instance.
+    :param cell: CellId instance.
     :return: None.
     """
     board.set_cell(point, cell)
 
-def turn_relative(cell, angle):
-    cell.set_relative_direction(angle)
-
-def turn_absolute(cell, angle):
-    cell.set_absolute_direction(angle)
-
-def get_type_of_cell(board, point):
+def turn(cell, angle):
     """
-    Gets cell type (enum) by point coordinates.
-    :param board: Board instance.
-    :param point: Point instance.
-    :return: enum of cell by point coordinates.
+    Turns cell to specific angle.
+    :param cell: Cell object.
+    :param angle: angle to turn to from current position.
+    :return: None.
     """
-    return board.get_cell(point).settings('id')
+    cell.turn(angle)
 
 def is_cell_of_types(board, point, types):
     """
@@ -99,8 +91,7 @@ def is_cell_of_types(board, point, types):
     :return: index if found, otherwise it returns -1.
     """
     try:
-        index = types.index(get_type_of_cell(board, point))
+        index = types.index(board.get_cell(point).id)
     except ValueError:
         return -1
-    else:
-        return index
+    return index

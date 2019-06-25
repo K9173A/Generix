@@ -4,7 +4,7 @@
 import enum
 
 
-class Cell(enum.Enum):
+class CellId(enum.Enum):
     EMPTY_CELL = 0
     STANDARD_CELL = 1
     HUNTER_CELL = 2

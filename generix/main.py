@@ -3,13 +3,9 @@ Application entry point.
 """
 import pygame
 
-# Imports to trigger class decorators which should register actions and cells
-# before they will be accessed via storage classes (processor and factory).
-import generix.core.cell.cell
-import generix.core.action.action
-
 from generix.core.app import AppWindow
-from generix.core.settings import WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX
+from generix.core.settings.registry import settings_reg
+from generix.core.settings.settings import EXPERIMENT_NAME
 
 
 def main():
@@ -17,8 +13,10 @@ def main():
     Application entry point.
     """
     pygame.init()
-    app = AppWindow(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX)
-    app.run()
+    width = settings_reg.find_option_by_key('window', 'width')
+    height = settings_reg.find_option_by_key('window', 'height')
+    app = AppWindow(width, height)
+    app.run(EXPERIMENT_NAME)
 
 
 if __name__ == '__main__':
