@@ -37,8 +37,6 @@ class AppWindow:
 
         # Creates new board for the experiment
         self._board_manager.create_new_board()
-
-        # Loads cells location from board.json
         if LOAD_BOARD:
             self._board_manager.load(BOARD_FILE_PATH)
 
@@ -53,18 +51,19 @@ class AppWindow:
 
             # Checks minimum population of cells to decide: should we continue or not
             if is_complete_simulation(self._board_manager.statistics):
+                # Saves cells locations to the file
+                self._board_manager.save(BOARD_FILE_PATH)
                 # Saves statistics to the database
                 self._db.create_simulation(experiment_name, i)
                 # Creates new board to start a new simulation
                 self._board_manager.create_new_board()
+                # Loads cells locations from the file (from previous simulation)
+                self._board_manager.load(BOARD_FILE_PATH)
 
             # Statistics is being recalculated on each iteration
             self._board_manager.renew_statistics()
 
             i += 1
-
-        # Saves cells locations to the file
-        self._board_manager.save(BOARD_FILE_PATH)
 
     def refresh_display(self, bitmap):
         """

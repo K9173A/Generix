@@ -7,12 +7,11 @@ import pygame
 
 from generix.core.cell.factory import factory
 from generix.core.cell.id import CellId
-from generix.core.cell.point import generate_random_point
+from generix.core.cell.point import Point, generate_random_point
+from generix.core.board.board import Board
 from generix.core.action.executor import execute, Action
 from generix.core.settings.registry import settings_reg
-from generix.core.board.board import Board
 from generix.core.settings.encoder import SettingsEncoder
-from generix.core.cell.point import Point
 from generix.core.data.statistics import IterationStatistics
 
 
@@ -50,23 +49,23 @@ class BoardManager:
             y = self._curr_board.prev_point.y
             data[f'{x},{y}'] = cell.id.value
 
-        with open(path, mode='w+', encoding='utf-8') as f:
+        with open(path, mode='w', encoding='utf-8') as f:
             json.dump(data, f, cls=SettingsEncoder)
 
     def load(self, path):
         """
         Loads board cells positions from the file.
-        :param path: path to the file whete data is being stored.
+        :param path: path to the file where data is being stored.
         :return: None.
         """
-        with open(path, mode='w+', encoding='utf-8') as f:
+        with open(path, mode='r', encoding='utf-8') as f:
             data = json.load(f)
 
         for location, cell_id_value in data.items():
             cell_id = CellId(cell_id_value)
-            if settings_reg.search(settings_reg.find(cell_id), 'save_location'):
+            if settings_reg.find_option_by_key(cell_id, 'save_location'):
                 (x, y) = location.split(',')
-                self._curr_board.set_cell(Point(x, y), factory.create_cell(cell_id))
+                self._curr_board.set_cell(Point(int(x), int(y)), factory.create_cell(cell_id))
 
     def create_new_board(self):
         """

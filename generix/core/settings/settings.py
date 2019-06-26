@@ -46,7 +46,7 @@ SETTINGS_FILE_PATH = os.path.join(CURR_EXPERIMENT_DIR_PATH, 'settings.json')
 LOAD_SETTINGS = os.path.exists(SETTINGS_FILE_PATH)
 
 # Configuration file with board settings
-BOARD_FILE_PATH = os.path.join(CURR_EXPERIMENT_DIR_PATH, 'settings.json')
+BOARD_FILE_PATH = os.path.join(CURR_EXPERIMENT_DIR_PATH, 'board.json')
 LOAD_BOARD = os.path.exists(BOARD_FILE_PATH)
 
 # Genomes configuration file path
@@ -96,7 +96,7 @@ DEFAULT_SETTINGS = {
             'genome_max_len': 1,
         },
         CellId.WALL_CELL: {
-            'cls': cell.FoodCell,
+            'cls': cell.WallCell,
             'color': (30, 30, 30),  # Dark gray
             'chance': 1,
             'allowed_actions': [Action.STAY],
