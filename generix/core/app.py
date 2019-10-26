@@ -44,11 +44,9 @@ class AppWindow:
         i = 0
         while not AppWindow.is_quit_event():
             updated_board = self._board_manager.update(fps=FPS, refresh_rate=REFRESH_RATE)
-
             # Updates only if enough time passed
             if updated_board:
                 self.refresh_display(updated_board)
-
             # Checks minimum population of cells to decide: should we continue or not
             if is_complete_simulation(self._board_manager.statistics):
                 # Saves cells locations to the file
@@ -59,10 +57,14 @@ class AppWindow:
                 self._board_manager.create_new_board()
                 # Loads cells locations from the file (from previous simulation)
                 self._board_manager.load(BOARD_FILE_PATH)
+                # TODO
+                # 1) Считать геномы выживших ботов
+                # 2) Клонировать каждую клетку n раз
+                # 3) Мутировать n / 10 клеток
+                self._board_manager.form_bots_generation()
 
             # Statistics is being recalculated on each iteration
             self._board_manager.renew_statistics()
-
             i += 1
 
     def refresh_display(self, bitmap):

@@ -48,15 +48,15 @@ class Genome:
         """
         return self._actions[index]
 
-    # def mutate(self, n=1):
-    #     """
-    #     Changes n actions in genome.
-    #     :param n: amount of actions to change.
-    #     :return: None.
-    #     """
-    #     new_cmds = [random.randint(0, genome_size - 1) for _ in range(n)]
-    #     for i in range(genome_size):
-    #         self._actions[i] = new_cmds[i]
+    def mutate(self, n=1):
+        """
+        Changes n actions in genome.
+        :param n: amount of actions to change.
+        :return: None.
+        """
+        new_cmds = [random.randint(0, len(self) - 1) for _ in range(n)]
+        for i in range(len(new_cmds) - 1):
+            self._actions[i] = new_cmds[i]
 
 
 def generate_genome(n, allowed_actions):

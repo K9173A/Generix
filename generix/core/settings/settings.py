@@ -50,7 +50,8 @@ BOARD_FILE_PATH = os.path.join(CURR_EXPERIMENT_DIR_PATH, 'board.json')
 LOAD_BOARD = os.path.exists(BOARD_FILE_PATH)
 
 # Genomes configuration file path
-# GENOME_FILE_PATH = os.path.join(EXPERIMENTS_DIR_PATH, 'genome.json')
+GENOME_FILE_PATH = os.path.join(EXPERIMENTS_DIR_PATH, 'genome.json')
+LOAD_GENOME = os.path.exists(GENOME_FILE_PATH)
 
 # Application database file for simulation
 DB_FILE_PATH = os.path.join(DB_DIR_PATH, 'generix.sqlite')

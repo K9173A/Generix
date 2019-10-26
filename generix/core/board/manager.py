@@ -223,6 +223,12 @@ class BoardManager:
         else:
             raise ValueError('undefined action value:', action)
 
+    def get_survived_cells(self):
+        self._curr_board.
+
+    def mutate_n_cells(self, n):
+        pass
+
 
 def render(board, color, cell_width, cell_height):
     """

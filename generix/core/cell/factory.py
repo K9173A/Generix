@@ -6,6 +6,7 @@ import random
 from generix.core.genome.genome import Genome
 from generix.core.cell.id import CellId
 from generix.core.settings.registry import settings_reg
+from generix.core.genome.registry import genome_reg
 
 
 class CellFactory:
@@ -35,11 +36,12 @@ class CellFactory:
         """
         cell_data = settings_reg.find(cell_id)
 
-        # TODO: загрузка генома из файла
-        genome = Genome.generate(
-            settings_reg.search(cell_data, 'genome_max_len'),
-            settings_reg.search(cell_data, 'allowed_actions')
-        )
+        genome = genome_reg.pick_genome(cell_id)
+        if genome is None:
+            genome = Genome.generate(
+                settings_reg.search(cell_data, 'genome_max_len'),
+                settings_reg.search(cell_data, 'allowed_actions')
+            )
 
         cls = settings_reg.search(cell_data, 'cls')
         if cell_id == CellId.HUNTER_CELL:

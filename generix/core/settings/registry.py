@@ -98,7 +98,7 @@ class SettingsRegistry:
     @staticmethod
     def search(dictionary, option):
         """
-        Recorsively searches option in dict.
+        Recursively searches option in dict.
         :param dictionary: dictionary object.
         :param option: key to search to.
         :return: value of option.
